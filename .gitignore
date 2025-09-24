@@ -1,0 +1,18 @@
+# Eclipse metadata
+SPRINGBOOTWORKSPACE/.metadata/
+
+# Backend build
+target/
+build/
+
+# Frontend build
+node_modules/
+dist/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
