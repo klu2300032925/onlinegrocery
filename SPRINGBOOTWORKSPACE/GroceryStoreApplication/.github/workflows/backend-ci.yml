@@ -1,6 +1,5 @@
 name: Backend CI/CD
 
-# Trigger only on backend folder changes (optional)
 on:
   push:
     branches: [main]
@@ -20,14 +19,14 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: Gowthami$1
-          MYSQL_DATABASE: grocerystoredb
+          MYSQL_DATABASE: grocerydb
         ports:
           - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=10
 
     steps:
     - name: Checkout code
@@ -39,14 +38,15 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Build Backend
-      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
+    - name: Build Backend with Maven Wrapper
       run: ./mvnw clean package -DskipTests
+      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
 
     - name: Build Docker Image
-      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
       run: docker build -t grocerystore-backend .
-
-    - name: Run Docker Container
       working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
+
+    - name: Run Backend Docker Container
       run: docker run -d -p 2025:2025 --name grocerystore-backend grocerystore-backend
+      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
+
