@@ -1,10 +1,15 @@
 name: Backend CI/CD
 
+# Trigger only on backend folder changes (optional)
 on:
   push:
     branches: [main]
+    paths:
+      - 'SPRINGBOOTWORKSPACE/GroceryStoreApplication/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'SPRINGBOOTWORKSPACE/GroceryStoreApplication/**'
 
 jobs:
   build-backend:
@@ -14,8 +19,8 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: grocerystore
+          MYSQL_ROOT_PASSWORD: Gowthami$1
+          MYSQL_DATABASE: grocerystoredb
         ports:
           - 3306:3306
         options: >-
@@ -35,10 +40,13 @@ jobs:
         distribution: 'temurin'
 
     - name: Build Backend
+      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
       run: ./mvnw clean package -DskipTests
 
     - name: Build Docker Image
+      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
       run: docker build -t grocerystore-backend .
 
     - name: Run Docker Container
+      working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
       run: docker run -d -p 2025:2025 --name grocerystore-backend grocerystore-backend
