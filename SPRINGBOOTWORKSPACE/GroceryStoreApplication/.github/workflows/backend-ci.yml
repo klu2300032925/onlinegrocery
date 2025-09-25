@@ -46,6 +46,16 @@ jobs:
       run: docker build -t grocerystore-backend .
       working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
 
+    - name: Wait for MySQL to be ready
+      run: |
+        echo "Waiting for MySQL..."
+        for i in {1..30}; do
+          mysqladmin ping -h 127.0.0.1 -P 3306 -u root -pGowthami$1 >/dev/null 2>&1 && break
+          echo "Waiting 5 seconds..."
+          sleep 5
+        done
+      shell: bash
+
     - name: Run Backend Docker Container
       run: docker run -d -p 2025:2025 --name grocerystore-backend grocerystore-backend
       working-directory: ./SPRINGBOOTWORKSPACE/GroceryStoreApplication
