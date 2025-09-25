@@ -1,0 +1,16 @@
+backend-app:
+  build:
+    context: .
+  container_name: grocerystore-backend-app
+  environment:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/grocerydb
+    SPRING_DATASOURCE_USERNAME: root
+    SPRING_DATASOURCE_PASSWORD: Gowthami$1
+    SERVER_PORT: 2025
+  ports:
+    - "2025:2025"
+  depends_on:
+    - mysql-db
+  networks:
+    - grocerystore-network
+
